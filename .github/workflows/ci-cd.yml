@@ -1,0 +1,78 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify .env is not committed
+        run: |
+          if [ -f .env ]; then
+            echo "CRITICAL ERROR: .env file found in repository! Remove it immediately and rotate your secrets."
+            exit 1
+          fi
+
+      - name: Check for required files
+        run: |
+          REQUIRED_FILES=(".env.example" "package.json" "app.js" ".gitignore")
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Required file '$file' is missing."
+              exit 1
+            fi
+          done
+
+      - name: Validate file extensions in specific directories
+        run: |
+          # Check views (only .hbs)
+          if find views -type f ! -name "*.hbs" | grep -q .; then
+            echo "ERROR: Only .hbs files are allowed in the /views directory."
+            find views -type f ! -name "*.hbs"
+            exit 1
+          fi
+
+          # Check routes (only .js)
+          if find routes -type f ! -name "*.js" | grep -q .; then
+            echo "ERROR: Only .js files are allowed in the /routes directory."
+            find routes -type f ! -name "*.js"
+            exit 1
+          fi
+
+          # Check stylesheets (only .css)
+          if find public/stylesheets -type f ! -name "*.css" | grep -q .; then
+            echo "ERROR: Only .css files are allowed in /public/stylesheets."
+            find public/stylesheets -type f ! -name "*.css"
+            exit 1
+          fi
+
+  build:
+    needs: validate-structure
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DB_URL }}
+      PORT: ${{ secrets.PORT }}
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Verify build-ready state
+        run: |
+          echo "Structure validated and dependencies installed."
