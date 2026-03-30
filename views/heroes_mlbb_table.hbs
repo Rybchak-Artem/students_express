@@ -6,7 +6,7 @@
 </button>
   <button 
     style="background-color: rgb(242, 130, 208)">
-    <a style="color:#ffffff" href="/heroes/add">
+    <a style="color:#ffffff" href="/heroes_mlbb/add">
         ADD HERO
     </a>
 </button>
@@ -31,8 +31,8 @@
             <td>{{this.role}}</td>       
             <td>{{this.attack_type}}</td>
 
-            <td><a href="/heroes/edit/{{this.id}}" class="btn-edit">Edit</a></td>
-            <td><a href="/heroes/delete/{{this.id}}" class="btn-delete" onclick="return confirm('Видалити {{this.name}}?')">Delete</a></td>
+            <td><a href="/heroes_mlbb/edit/{{this.id}}" class="btn-edit">Edit</a></td>
+            <td><a href="/heroes_mlbb/delete/{{this.id}}" class="btn-delete" onclick="return confirm('Видалити {{this.name}}?')">Delete</a></td>
             
         </tr>
         {{else}}

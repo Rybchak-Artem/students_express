@@ -23,7 +23,7 @@ router.post("/add", async (req, res) => {
     const { hero_name, hero_class, hero_role, attack_type } = req.body;
 
     const query = `
-      INSERT INTO heroes (name, hero_class, role, attack_type)
+      INSERT INTO heroes_mlbb (name, hero_class, role, attack_type)
       VALUES ($1, $2, $3, $4)
     `;
 
