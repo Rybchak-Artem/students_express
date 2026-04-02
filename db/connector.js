@@ -54,6 +54,15 @@ createTableQueries.push(`
    );
       `);
 
+
+
+
+
+
+
+
+
+      
 createTableQueries.push(`
  CREATE TABLE IF NOT EXISTS games_info (
     id SERIAL PRIMARY KEY,
