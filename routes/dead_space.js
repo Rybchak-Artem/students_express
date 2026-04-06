@@ -117,7 +117,7 @@ router.post('/edit/:id', async function (req, res, next) {
           reload_seconds = $4,
           additional_info = $5
       WHERE id = $6
-      `
+      `,
 
       [
       name_of_gun,
